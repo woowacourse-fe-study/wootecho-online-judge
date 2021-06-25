@@ -1,5 +1,3 @@
-// lottos의 원소들은 정렬되어 있지 않을 수도 있습니다.
-
 const solution = (lottos, winNumbers) => {
   const rankByMatchCount = {
     6: 1,
