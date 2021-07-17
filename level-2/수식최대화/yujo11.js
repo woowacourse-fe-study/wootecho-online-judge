@@ -1,20 +1,24 @@
-// const calc = {
-//   "+": (a, b) => a + b,
-//   "-": (a, b) => a - b,
-//   "*": (a, b) => a * b,
-// };
+const calc = {
+  "+": (a, b) => a + b,
+  "-": (a, b) => a - b,
+  "*": (a, b) => a * b,
+};
+
+const priorityList = [
+  ["*", "+", "-"],
+  ["*", "-", "+"],
+  ["+", "*", "-"],
+  ["+", "-", "*"],
+  ["-", "+", "*"],
+  ["-", "*", "+"],
+];
 
 const solution = (expression) => {
-  const results = [];
+  if (expression.length < 4) {
+    return eval(expression);
+  }
 
-  const priorityList = [
-    ["*", "+", "-"],
-    ["*", "-", "+"],
-    ["+", "*", "-"],
-    ["+", "-", "*"],
-    ["-", "+", "*"],
-    ["-", "*", "+"],
-  ];
+  const results = [];
 
   for (const priority of priorityList) {
     const items = expression.split(/([^0-9])/);
@@ -23,19 +27,16 @@ const solution = (expression) => {
     for (const operator of priority) {
       while (items.includes(operator)) {
         const index = items.indexOf(operator);
-        items
-          .splice(
-            index - 1,
-            3,
-            eval(items.slice(index - 1, index + 2).join(""))
-          )
-          .join("");
 
-        // console.log(items);
+        let a = Number(items[index - 1]);
+        let b = Number(items[index + 1]);
+
+        result = calc[operator](a, b);
+
+        items.splice(index - 1, 3, result);
       }
-
-      results.push(Math.abs(items[0]));
     }
+    results.push(Math.abs(result));
   }
 
   return Math.max(...results);
