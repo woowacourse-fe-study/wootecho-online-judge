@@ -31,12 +31,6 @@ const solution = (str1, str2) => {
   return Math.floor((both.length / (both.length + only1.length + only2.length)) * FACTOR);
 };
 
-// 입력으로 들어온 문자열은 두 글자씩 끊어서 다중집합의 원소로 만든다.
-// 이때 영문자로 된 글자 쌍만 유효하고, 기타 공백이나 숫자, 특수 문자가 들어있는 경우는 그 글자 쌍을 버린다.
-// 예를 들어 "ab+"가 입력으로 들어오면, "ab"만 다중집합의 원소로 삼고, "b+"는 버린다.
-
-// 0에서 1 사이의 실수이므로, 이를 다루기 쉽도록 65536을 곱한 후에 소수점 아래를 버리고 정수부만 출력한다.
-
 console.log(solution('FRANCE', 'french'));
 // 16384
 console.log(solution('handshake', 'shake hands'));
