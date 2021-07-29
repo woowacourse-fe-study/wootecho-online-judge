@@ -29,10 +29,10 @@ const solution = (height, width, board) => {
     sum += poppedSet.size;
 
     for (const point of poppedSet) {
-      const [y, x] = point.split('');
+      const [y, x] = point.split('').map((v) => Number(v));
 
       for (let i = y; i >= 0; i--) {
-        board[i][x] = i === 0 ? EMPTY : board[i - 1][x];
+        board[i][x] = i == 0 ? EMPTY : board[i - 1][x];
       }
     }
   }
@@ -42,5 +42,5 @@ const solution = (height, width, board) => {
 
 console.log(solution(4, 5, ['CCBDE', 'AAADE', 'AAABF', 'CCBBF']));
 // 14
-// console.log(solution(6, 6, ['TTTANT', 'RRFACC', 'RRRFCC', 'TRRRAA', 'TTMMMF', 'TMMTTJ']));
+console.log(solution(6, 6, ['TTTANT', 'RRFACC', 'RRRFCC', 'TRRRAA', 'TTMMMF', 'TMMTTJ']));
 // 15
