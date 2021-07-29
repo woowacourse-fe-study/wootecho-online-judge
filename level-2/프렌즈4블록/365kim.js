@@ -19,6 +19,7 @@ const solution = (height, width, board) => {
         if (isPop(i, j)) {
           flag = true;
 
+          /* 구분자를 빼먹지 않도록 주의 */
           poppedPoints.push(String(i) + SEPARATOR + String(j));
           poppedPoints.push(String(i) + SEPARATOR + String(j + 1));
           poppedPoints.push(String(i + 1) + SEPARATOR + String(j));
