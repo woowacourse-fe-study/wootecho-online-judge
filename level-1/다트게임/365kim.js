@@ -24,8 +24,7 @@ const solution = (dartResult) => {
       darts[i] += char;
     }
     if (isRange(char)) {
-      answers[i] = Number(darts[i]);
-      answers[i] = processRange[char](answers[i]);
+      answers[i] = processRange[char](Number(darts[i]));
     }
     if (isOption(char)) {
       const [newCurr, newPrev] = processOption[char](answers[i], answers[i - 1]);
