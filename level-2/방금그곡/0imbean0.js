@@ -1,6 +1,6 @@
 function timeCalculator(time1, time2) {
-  const [H1, M1] = time1.split(":");
-  const [H2, M2] = time2.split(":");
+  const [H1, M1] = time1.split(":").map((e) => Number(e));
+  const [H2, M2] = time2.split(":").map((e) => Number(e));
   let [dH, dM] = [H2 - H1, M2 - M1];
 
   return dH * 60 + dM;
@@ -17,37 +17,10 @@ function translator(musicSheet) {
 }
 
 function musicCreator(playTime, musicSheet) {
-  const repaetCount = Math.floor(playTime / musicSheet.length);
+  const repeatCount = Math.floor(playTime / musicSheet.length);
   const sliceCount = playTime % musicSheet.length;
 
-  return musicSheet.repeat(repaetCount) + musicSheet.slice(0, sliceCount);
-}
-
-function musicFinder(melody, music) {
-  const [N, M] = [melody.length, music.length];
-  let [n, m] = [N - 1, N - 1];
-
-  while (m < M) {
-    let e = 1;
-
-    for (let c = 1; c < N; c++) {
-      const [dn, dm] = [n - c, m - c];
-
-      if (melody[dn] === music[dm]) continue;
-
-      const t = music[dm];
-      const s = melody.slice(0, dn).lastIndexOf(t);
-
-      m = s !== -1 ? m + dn - s : m + N;
-      e = 0;
-
-      break;
-    }
-
-    if (e) return true;
-  }
-
-  return false;
+  return musicSheet.repeat(repeatCount) + musicSheet.slice(0, sliceCount);
 }
 
 function solution(melody, musicInfos) {
@@ -57,7 +30,7 @@ function solution(melody, musicInfos) {
     const [time1, time2, title, musicSheet] = info.split(",");
     const playTime = timeCalculator(time1, time2);
     const music = musicCreator(playTime, translator(musicSheet));
-    const isEqual = musicFinder(translator(melody), music);
+    const isEqual = music.includes(translator(melody));
 
     LPT = isEqual && LPT < playTime ? playTime : LPT;
 
