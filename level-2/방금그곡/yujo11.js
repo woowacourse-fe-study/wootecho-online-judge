@@ -1,4 +1,4 @@
-const changeNote = (note) => {
+const getNote = (note) => {
   return note
     .replace(/C#/g, "c")
     .replace(/E#/g, "e")
@@ -13,51 +13,36 @@ const getTime = (start, end) => {
   const [startHour, startMinute] = start.split(":");
   const [endHour, endMinute] = end.split(":");
 
-  const hour =
-    endHour >= startHour ? endHour - startHour : 24 - (startHour - endHour);
-  const minute =
-    endMinute >= startMinute
-      ? endMinute - startMinute
-      : 60 - (startMinute - endMinute);
+  const hour = Math.abs(Number(startHour) - Number(endHour) - 1);
+  const minute = Math.abs(60 + Number(endMinute) - Number(startMinute));
 
-  return Number(60 * hour + minute);
+  return hour * 60 + minute;
 };
 
 const solution = (m, musicinfos) => {
+  const music = getNote(m);
   musicinfos = musicinfos.map((musicinfo) => musicinfo.split(","));
 
-  const rememberNote = changeNote(m);
-  const candidateMusic = [];
+  const result = [];
 
   for (let i = 0; i < musicinfos.length; i++) {
     const [start, end, title, note] = musicinfos[i];
 
     const time = getTime(start, end);
-    const playNote = changeNote(note);
 
-    const times = time / playNote.length;
-    const rest = time % playNote.length;
+    const playNote = getNote(note);
 
-    const playNotes = playNote.repeat(times) + playNote.substr(0, rest);
+    const playMusic =
+      playNote.repeat(time / playNote.length) +
+      playNote.substr(0, time % playNote.length);
 
-    if (playNotes.includes(rememberNote)) {
-      candidateMusic.push({ title, index: i, playTime: time });
+    if (playMusic.includes(music)) {
+      result.push({ title, playTime: time, index: i });
     }
   }
 
-  const temp = [...candidateMusic];
-  console.log(
-    temp.sort((a, b) => {
-      if (a.playTime === b.playTime) {
-        return a.index - b.index;
-      }
-
-      return b.playTime - a.playTime;
-    })
-  );
-
-  return candidateMusic.length
-    ? candidateMusic.sort((a, b) => {
+  return result.length
+    ? result.sort((a, b) => {
         if (a.playTime === b.playTime) {
           return a.index - b.index;
         }
@@ -71,23 +56,23 @@ const solution = (m, musicinfos) => {
 
 // test code
 
-// console.log(
-//   solution("ABCDEFG", ["12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"])
-// ); // HELLO
+console.log(
+  solution("ABCDEFG", ["12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"])
+); // HELLO
 
-// console.log(
-//   solution("CC#BCC#BCC#BCC#B", [
-//     "02:00,02:31,FOgO,CC#B",
-//     "03:00,03:31,FOO,CC#B",
-//     "04:00,04:08,BAR,CC#BCC#BCC#B",
-//   ])
-// ); // FOO
+console.log(
+  solution("CC#BCC#BCC#BCC#B", [
+    "02:00,02:31,FoO,CC#B",
+    "03:00,03:31,FOO,CC#B",
+    "04:00,04:08,BAR,CC#BCC#BCC#B",
+  ])
+); // FOO
 
-// console.log(
-//   solution("ABC", ["12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"])
-// ); // WORLD
+console.log(
+  solution("ABC", ["12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"])
+); // WORLD
 
-// console.log(solution("CDEFGAC", ["12:00,12:06,HELLO,CDEFGA"])); // NONE
+console.log(solution("CDEFGAC", ["12:00,12:06,HELLO,CDEFGA"])); // NONE
 
 console.log(
   solution("ABC", ["12:00,12:14,HELLO,CDEFGAB", "13:00,13:14,WORLD,ABCDEF"])
