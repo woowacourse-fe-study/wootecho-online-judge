@@ -6,11 +6,21 @@ function timeCalculator(time1, time2) {
   return dH * 60 + dM;
 }
 
+function translator(musicSheet) {
+  return Array.from(musicSheet)
+    .reduce((arr, e) => {
+      arr.push(e === "#" ? arr.pop().toLowerCase() : e);
+
+      return arr;
+    }, [])
+    .join("");
+}
+
 function musicCreator(playTime, musicSheet) {
-  const repeatCount = Math.floor(playTime / musicSheet.length);
+  const repaetCount = Math.floor(playTime / musicSheet.length);
   const sliceCount = playTime % musicSheet.length;
 
-  return musicSheet.repeat(repeatCount) + musicSheet.slice(0, sliceCount);
+  return musicSheet.repeat(repaetCount) + musicSheet.slice(0, sliceCount);
 }
 
 function musicFinder(melody, music) {
@@ -18,12 +28,6 @@ function musicFinder(melody, music) {
   let [n, m] = [N - 1, N - 1];
 
   while (m < M) {
-    if (m + 1 < M && music[m + 1] === "#") {
-      m += 1;
-
-      continue;
-    }
-
     let e = 1;
 
     for (let c = 1; c < N; c++) {
@@ -52,12 +56,12 @@ function solution(melody, musicInfos) {
   const infoSummary = musicInfos.map((info) => {
     const [time1, time2, title, musicSheet] = info.split(",");
     const playTime = timeCalculator(time1, time2);
-    const music = musicCreator(playTime, musicSheet);
-    const isEqual = musicFinder(melody, music);
+    const music = musicCreator(playTime, translator(musicSheet));
+    const isEqual = musicFinder(translator(melody), music);
 
     LPT = isEqual && LPT < playTime ? playTime : LPT;
 
-    return { isEqual, playTime, title };
+    return { isEqual, title, playTime };
   });
 
   const results = infoSummary.filter(
