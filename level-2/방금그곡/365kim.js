@@ -9,8 +9,7 @@ const solution = (rawHeard, musicInfos) => {
 
     const [startHH, startMM] = start.split(':').map(Number);
     const [endHH, endMM] = end.split(':').map(Number);
-    const HH = (endHH - startHH + 24) % 24;
-    const MM = endMM - startMM < 0 ? endMM - startMM + 60 : endMM - startMM;
+    const [HH, MM] = [endHH - startHH, endMM - startMM];
     const time = HH * 60 + MM;
 
     const melody = convert(rawMelody);
